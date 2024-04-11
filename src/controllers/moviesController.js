@@ -1,10 +1,15 @@
 const db = require('../database/models');
 const sequelize = db.Sequelize;
+const {validationResult} = require('express-validator');
 
 //Otra forma de llamar a los modelos
 const Movies = db.Movie;
 
-const moviesController = {
+
+const errors = validationResult(req);
+
+ module.exports = {
+
     'list': (req, res) => {
         db.Movie.findAll()
             .then(movies => {
@@ -93,5 +98,3 @@ const moviesController = {
     }
 
 }
-
-module.exports = moviesController;
