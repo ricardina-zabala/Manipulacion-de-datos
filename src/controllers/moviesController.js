@@ -17,7 +17,7 @@ const moviesController = {
                 res.render('moviesDetail.ejs', {movie});
             });
     },
-    'new': (req, res) => {
+    'nuevo': (req, res) => {
         db.Movie.findAll({
             order : [
                 ['release_date', 'DESC']
@@ -77,13 +77,13 @@ const moviesController = {
         res.redirect('/movies/edit/' + req.params.id);
 
     },
-    delete: function (req, res) {
+    borrar: function (req, res) {
         Movies.findByPk(req.params.id)
         .then(Movie => {
             res.render('moviesDelete', {Movie});
         })
     },
-    borrar: function (req, res) {
+    destroy: function (req, res) {
         Movies.destroy({
             where:{
                 id: req.params.id
