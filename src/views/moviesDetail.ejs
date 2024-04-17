@@ -28,11 +28,17 @@
     </p>
     <p>RELEASE DATE: <%= movie.release_date %>
     </p>
+    <p>GENRE: <%= movie.genre.name %></p>
+    </p>
+    
 
-    <div class="col-6">
-        <a href="/movies/edit/<%= movie.id %>" type="button" class="col-3 btn btn-outline-secondary" >Editar</a>
-        <a href="/movies/delete/<%= movie.id %>" type="button" class="col-3 btn btn-outline-danger">Borrar</a>
+    <div class="col-12">
+        <a href="/movies/edit/<%= movie.id %>" type="button" class="col-2 btn btn-outline-secondary">Modificar</a>
+        <a href="/movies/delete/<%= movie.id %>" type="button" class="col-2 btn btn-outline-danger">Borrar</a>
+        <a href="/movies/add" type="button" class="col-3 btn btn-outline-primary">Agregar Películas</a>
+        <a href="/movies" type="button" class="col-3 btn btn-outline-success">Listado de Películas</a>
     </div>
+
 </body>
 
 </html>

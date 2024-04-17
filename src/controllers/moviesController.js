@@ -3,6 +3,17 @@ const sequelize = db.Sequelize;
 
 //Otra forma de llamar a los modelos
 const Movies = db.Movie;
+const Genres = db.Genre;
+
+const dateFormat = function (date) {
+    const year = date.getFullYear()
+    let month = date.getMonth()
+    month < 10 ? month = "0" + month : month
+    let day = date.getDay()
+    day < 10 ? day = "0" + day : day
+    const newFormat = `${year}-${month}-${day}`
+    return newFormat
+}
 
 const moviesController = {
     'list': (req, res) => {
@@ -12,9 +23,16 @@ const moviesController = {
             })
     },
     'detail': (req, res) => {
-        db.Movie.findByPk(req.params.id)
-            .then(movie => {
-                res.render('moviesDetail.ejs', { movie });
+        Genres.findAll()
+            .then(genres => {
+                Movies.findByPk(req.params.id, {
+                    include: [{
+                        association: 'genre'
+                    }]
+                })
+                    .then(movie => {
+                        res.render('moviesDetail.ejs', { movie, genres });
+                    });
             });
     },
     'nuevo': (req, res) => {
@@ -42,7 +60,12 @@ const moviesController = {
             });
     }, //Aqui debemos modificar y completar lo necesario para trabajar con el CRUD
     add: function (req, res) {
-        res.render('moviesAdd');
+        Genres.findAll()
+            .then(genres => {
+                res.render('moviesAdd', {
+                    genres
+                })
+            })
     },
     create: function (req, res) {
         Movies.create({
@@ -50,15 +73,24 @@ const moviesController = {
             rating: req.body.rating,
             awards: req.body.awards,
             release_date: req.body.release_date,
-            length: req.body.length
-        })
+            length: req.body.length,
+            genre_id: req.body.genre_id
+        }),
 
-        res.redirect('/movies');
+            res.redirect('/movies')
     },
     edit: function (req, res) {
-        Movies.findByPk(req.params.id)
-            .then(Movie => {
-                res.render('moviesEdit', { Movie });
+        Genres.findAll()
+            .then(genres => {
+                Movies.findByPk(req.params.id, {
+                    include: [{
+                        association: 'genre'
+                    }]
+                })
+                    .then(Movie => {
+                        const formatDate = dateFormat(Movie.release_date)
+                        res.render('moviesEdit', { Movie, genres, formatDate });
+                    })
             })
     },
     update: function (req, res) {
@@ -67,7 +99,8 @@ const moviesController = {
             rating: req.body.rating,
             awards: req.body.awards,
             release_date: req.body.release_date,
-            length: req.body.length
+            length: req.body.length,
+            genre_id: req.body.genre_id
         }, {
             where: {
                 id: req.params.id
@@ -93,5 +126,6 @@ const moviesController = {
     }
 
 }
+
 
 module.exports = moviesController;
