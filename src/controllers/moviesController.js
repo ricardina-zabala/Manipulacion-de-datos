@@ -4,15 +4,16 @@ const sequelize = db.Sequelize;
 //Otra forma de llamar a los modelos
 const Movies = db.Movie;
 const Genres = db.Genre;
+const Actors = db.Actor;
 
 const dateFormat = function (date) {
-    const year = date.getFullYear()
-    let month = date.getMonth()
-    month < 10 ? month = "0" + month : month
-    let day = date.getDay()
-    day < 10 ? day = "0" + day : day
-    const newFormat = `${year}-${month}-${day}`
-    return newFormat
+    const year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    month = month < 10 ? "0" + month : month;
+    let day = date.getDate() + 1;
+    day = day < 10 ? "0" + day : day;
+    const newFormat = `${year}-${month}-${day}`;
+    return newFormat;
 }
 
 const moviesController = {
@@ -31,7 +32,8 @@ const moviesController = {
                     }]
                 })
                     .then(movie => {
-                        res.render('moviesDetail.ejs', { movie, genres });
+                        const formatDate = dateFormat(movie.release_date)
+                        res.render('moviesDetail.ejs', { movie, genres, formatDate });
                     });
             });
     },
@@ -92,6 +94,7 @@ const moviesController = {
                         res.render('moviesEdit', { Movie, genres, formatDate });
                     })
             })
+        
     },
     update: function (req, res) {
         Movies.update({
