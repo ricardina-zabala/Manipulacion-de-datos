@@ -25,15 +25,19 @@ const moviesController = {
     },
     'detail': (req, res) => {
         Genres.findAll()
-            .then(genres => {
+            .then((genres, actors) => {
                 Movies.findByPk(req.params.id, {
                     include: [{
                         association: 'genre'
-                    }]
+                    },
+                    {
+                        association: 'actors'
+                    }
+                ]
                 })
-                    .then(movie => {
+                    .then((movie) => {
                         const formatDate = dateFormat(movie.release_date)
-                        res.render('moviesDetail.ejs', { movie, genres, formatDate });
+                        res.render('moviesDetail.ejs', { movie, genres, formatDate, actors });
                     });
             });
     },
@@ -94,7 +98,6 @@ const moviesController = {
                         res.render('moviesEdit', { Movie, genres, formatDate });
                     })
             })
-        
     },
     update: function (req, res) {
         Movies.update({

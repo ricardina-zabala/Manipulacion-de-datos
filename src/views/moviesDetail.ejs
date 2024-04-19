@@ -30,6 +30,14 @@
     </p>
     <p>GENRE: <%= movie.genre.name %></p>
     </p>
+    <p>ACTORS: 
+    <ul>
+        <% movie.actors.forEach(function(a) { %>
+            <li><%= a.first_name %> <%= a.last_name %></li>
+          
+        <% });%>
+    </ul>
+    </p>
     
 
     <div class="col-12">
